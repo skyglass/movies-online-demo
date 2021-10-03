@@ -100,7 +100,7 @@ spec:
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
-  name: ui
+  name: movies-ui
 spec:
   hosts:
     - movie.skycomposer.net
@@ -109,7 +109,7 @@ spec:
   http:
     - match:
       - uri:
-          prefix: /ui
+          prefix: /movies-ui
       route:
         - destination:
             host: movies-ui.default.svc.cluster.local
@@ -124,7 +124,7 @@ spec:
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
-  name: api
+  name: movies-api
 spec:
   hosts:
     - movie.skycomposer.net
@@ -133,7 +133,7 @@ spec:
   http:
     - match:
       - uri:
-          prefix: /api
+          prefix: /movies-api
       route:
         - destination:
             host: movies-api.default.svc.cluster.local

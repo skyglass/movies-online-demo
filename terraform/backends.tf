@@ -1,7 +1,7 @@
 terraform {
   backend "s3" {
-    bucket = "skycomposer-istio"
+    bucket = "skycomposer-movie"
     key    = "terraform/backend"
-    region = "us-west-2"
+    region = "us-west-1"
   }
 }

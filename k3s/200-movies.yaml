@@ -14,23 +14,47 @@ spec:
         version: v1
     spec:
       containers:
-      - name: movies-api
-        image: skyglass/movies-api:1.0.0
-        imagePullPolicy: Always
-        env:
-        - name: KEYCLOAK_HOST
-          value: "movie.skycomposer.net"
-        - name: KEYCLOAK_PORT
-          value: 80
-        - name: ALLOWED_ORIGIN
-          value: "https://movie.skycomposer.net/ui"
-        ports:
-        - containerPort: 80
-        resources:
-          requests:
-            memory: "200Mi"
-          limits:
-            memory: "400Mi"
+        - name: movies-api
+          image: skyglass/movies-api:1.0.0
+          imagePullPolicy: Always
+          env:
+            - name: KEYCLOAK_HOST
+              value: "movie.skycomposer.net"
+            - name: KEYCLOAK_PORT
+              value: "443"
+            - name: MONGODB_HOST
+              value: "mongodb"
+            - name: MONGODB_PORT
+              value: "27017"              
+            - name: ALLOWED_ORIGIN
+              value: "https://movie.skycomposer.net/ui"
+          ports:
+          - containerPort: 80
+          resources:
+            requests:
+              memory: "200Mi"
+            limits:
+              memory: "400Mi"
+          livenessProbe:
+            httpGet:
+              scheme: HTTP
+              path: /actuator/info
+              port: 4004
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 2
+            failureThreshold: 30
+            successThreshold: 1
+          readinessProbe:
+            httpGet:
+              scheme: HTTP
+              path: /actuator/health
+              port: 4004
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 2
+            failureThreshold: 3
+            successThreshold: 1
 
 ---
 apiVersion: apps/v1
@@ -72,6 +96,9 @@ spec:
     - port: 80
       name: http
       targetPort: 80
+    - port: 4004
+      name: http-mgm
+      targetPort: 4004      
 
 
 ---
@@ -85,4 +112,4 @@ spec:
   ports:
     - port: 80
       name: http
-      targetPort: 80      
+      targetPort: 80
