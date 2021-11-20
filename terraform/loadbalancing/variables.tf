@@ -10,3 +10,5 @@ variable "elb_interval" {}
 variable "listener_port" {}
 variable "listener_protocol" {}
 variable "certificate_arn" {}
+variable "domain_name" {}
+variable "hosted_zone_id" {}

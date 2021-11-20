@@ -1,14 +1,14 @@
 # Books Online Microservices Demo
 
-**Swagger UI:** **https://istio.skycomposer.net/product-composite/swagger-ui/index.html**
+**Swagger UI:** **https://movie.skycomposer.net/product-composite/swagger-ui/index.html**
 
-**Keycloak Admin Console:** **https://istio.skycomposer.net**
+**Keycloak Admin Console:** **https://movie.skycomposer.net**
 
-**Jaeger Distributed Tracing:** **https://istio.skycomposer.net/jaeger**
+**Jaeger Distributed Tracing:** **https://movie.skycomposer.net/jaeger**
 
-**Grafana Dashboard:** **https://istio.skycomposer.net/grafana**
+**Grafana Dashboard:** **https://movie.skycomposer.net/grafana**
 
-**Kiali Management Console:** **https://istio.skycomposer.net/kiali**
+**Kiali Management Console:** **https://movie.skycomposer.net/kiali**
 
 ## Books Online Microservices Demo on AWS with Terraform, K3S Kubernetes Cluster, Istio Gateway, Jaeger Distributed Tracing, Swagger UI REST API, Keycloak OAuth2 Authorization Server, Kiali Management Console and Grafana Monitoring Dashboard:
 
@@ -215,13 +215,13 @@ export KUBECONFIG=./k3s/k3s.yaml
 
 - let's assume that the name of your domain is "**test.com**" and "**DNS name**" of your LoadBalancer is "**mtc-loadbalancer.com**"
 
-- create "**CNAME**" record with the name "**istio.test.com**" and the value "**mtc-loadbalancer.com**"
+- create "**CNAME**" record with the name "**movie.test.com**" and the value "**mtc-loadbalancer.com**"
 
-- let's assume that the name of your "**CNAME**" record is "**istio.test.com**" 
+- let's assume that the name of your "**CNAME**" record is "**movie.test.com**" 
 
 - let's assume that "**DNS name**" of your Load Balancer is "**mtc-loadbalancer.com**"
 
-- let's assume that you correctly registered your domain, created hosted zone, registered AWS SSL Certificate for your domain "***.test.com**" and created "**CNAME**" record with the name "**istio.test.com**" and the value "**mtc-loadbalancer.com**"
+- let's assume that you correctly registered your domain, created hosted zone, registered AWS SSL Certificate for your domain "***.test.com**" and created "**CNAME**" record with the name "**movie.test.com**" and the value "**mtc-loadbalancer.com**"
 
 
 
@@ -235,13 +235,13 @@ export KUBECONFIG=./k3s/k3s.yaml
 
 - go to "**k3s**" folder of this github repository
 
-- Edit "**301-istio-gateway.yaml**": replace "**istio.skycomposer.net**" with the name of your sub-domain ("**istio.test.com**", for example)
+- Edit "**301-istio-gateway.yaml**": replace "**movie.skycomposer.net**" with the name of your sub-domain ("**movie.test.com**", for example)
 
-- Edit "**302-istio-virtualservices.yaml**": replace "**istio.skycomposer.net**" with the name of your sub-domain ("**istio.test.com**", for example)
+- Edit "**302-istio-virtualservices.yaml**": replace "**movie.skycomposer.net**" with the name of your sub-domain ("**movie.test.com**", for example)
 
-- Edit "**config-repo/product-composite.yml**": replace "**istio.skycomposer.net**" with the name of your sub-domain ("**istio.test.com**", for example)
+- Edit "**config-repo/product-composite.yml**": replace "**movie.skycomposer.net**" with the name of your sub-domain ("**movie.test.com**", for example)
 
-- Edit "**config-repo/product.yml**": replace "**istio.skycomposer.net**" with the name of your sub-domain ("**istio.test.com**", for example)
+- Edit "**config-repo/product.yml**": replace "**movie.skycomposer.net**" with the name of your sub-domain ("**movie.test.com**", for example)
 
 
 
@@ -249,11 +249,11 @@ export KUBECONFIG=./k3s/k3s.yaml
 
 - go to "**k3s-dashboard**" folder of this github repository
 
-- Edit "**grafana.yaml**": replace the value of "**GF_SERVER_ROOT_URL**" property: "**https://istio.skycomposer.net/grafana**" with correspondent url of your domain ("**https://istio.test.com/grafana**", for example)
+- Edit "**grafana.yaml**": replace the value of "**GF_SERVER_ROOT_URL**" property: "**https://movie.skycomposer.net/grafana**" with correspondent url of your domain ("**https://movie.test.com/grafana**", for example)
 
-- Edit "**kiali.yaml**": replace the value of "**grafana: url**" property: "**https://istio.skycomposer.net/grafana/**" with correspondent url of your domain ("**https://istio.test.com/grafana**", for example)
+- Edit "**kiali.yaml**": replace the value of "**grafana: url**" property: "**https://movie.skycomposer.net/grafana/**" with correspondent url of your domain ("**https://movie.test.com/grafana**", for example)
 
-- Edit "**kiali.yaml**": replace the value of "**tracing: url**" property: "**https://istio.skycomposer.net/jaeger**" with correspondent url of your domain ("**https://istio.test.com/jaeger**", for example)
+- Edit "**kiali.yaml**": replace the value of "**tracing: url**" property: "**https://movie.skycomposer.net/jaeger**" with correspondent url of your domain ("**https://movie.test.com/jaeger**", for example)
 
 
 
@@ -278,7 +278,7 @@ Make sure that all pods in default namespace have 2 containers
 
 ## Step-08: Configure your Keycloak Authorization Server:
 
-- go to "**https://istio.test.com/**"
+- go to "**https://movie.test.com/**"
 
 - you will be redirected to **Keycloak Home Page**
 
@@ -298,7 +298,7 @@ Make sure that all pods in default namespace have 2 containers
 
 ## Step-09: Test "Books Online" Microservices with Swagger UI:
 
-- go to "**https://istio.test.com/product-composite/swagger-ui/index.html**"
+- go to "**https://movie.test.com/product-composite/swagger-ui/index.html**"
 
 - try any REST endpoint in "**product-composite-service-impl**" section: you should get "**401 Unauthorized Error" response
 
@@ -328,7 +328,7 @@ Make sure that all pods in default namespace have 2 containers
 
 ## Step-11: Test Jaeger Distributed Tracing:
 
-- go to "**https://istio.test.com/jaeger**"
+- go to "**https://movie.test.com/jaeger**"
 
 - you should see successfully loaded "**Jaeger**" dashboard
 
