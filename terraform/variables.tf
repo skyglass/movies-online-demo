@@ -1,5 +1,5 @@
 variable "aws_region" {
-  default = "us-west-1"
+  default = "us-west-2"
 }
 
 variable "profile" {
@@ -9,6 +9,8 @@ variable "profile" {
 variable "access_ip" {}
 
 variable "profile_account" {}
+
+variable "domain_name" {}
 
 variable "public_key_path" {
   type      = string
@@ -21,6 +23,11 @@ variable "private_key_path" {
 }
 
 variable "certificate_arn" {
+  type      = string
+  sensitive = true
+}
+
+variable "hosted_zone_id" {
   type      = string
   sensitive = true
 }

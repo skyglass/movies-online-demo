@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: recommendation
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: recommendation
+  template:
+    metadata:
+      labels:
+        app: recommendation
+        version: v1
+    spec:
+      containers:
+      - name: rec
+        image: skyglass/recommendation-service:1.0.0
+        imagePullPolicy: Always
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: "docker,prod"
+        - name: SPRING_CONFIG_LOCATION
+          value: file:/config-repo/application.yml,file:/config-repo/recommendation.yml
+        envFrom:
+        - secretRef:
+            name: rabbitmq-credentials
+        - secretRef:
+            name: mongodb-credentials
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            memory: "200Mi"
+          limits:
+            memory: "400Mi"
+        volumeMounts:
+        - name: config-repo-volume
+          mountPath: /config-repo
+      volumes:
+      - name: config-repo-volume
+        configMap:
+          name: config-repo-recommendation          
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: recommendation
+spec:
+  selector:
+    app: recommendation
+  ports:
+    - name: http
+      port: 80
+      targetPort: 80

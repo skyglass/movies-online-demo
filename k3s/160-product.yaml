@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: product
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: product
+  template:
+    metadata:
+      labels:
+        app: product
+        version: latest
+    spec:
+      containers:
+      - name: pro
+        image: skyglass/product-service:1.0.0
+        imagePullPolicy: Always
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: "docker,prod"
+        - name: SPRING_CONFIG_LOCATION
+          value: file:/config-repo/application.yml,file:/config-repo/product.yml          
+        envFrom:
+        - secretRef:
+            name: rabbitmq-credentials
+        - secretRef:
+            name: mongodb-credentials
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            memory: "200Mi"
+          limits:
+            memory: "400Mi"
+        volumeMounts:
+        - name: config-repo-volume
+          mountPath: /config-repo
+      volumes:
+      - name: config-repo-volume
+        configMap:
+          name: config-repo-product          
+
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: product
+spec:
+  selector:
+    app: product
+  ports:
+  - name: http
+    port: 80
+    targetPort: 80

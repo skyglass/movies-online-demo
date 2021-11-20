@@ -28,6 +28,8 @@ module "loadbalancing" {
   listener_port           = 80
   listener_protocol       = "HTTP"
   certificate_arn         = var.certificate_arn
+  hosted_zone_id          = var.hosted_zone_id
+  domain_name             = var.domain_name
 }
 
 module "compute" {

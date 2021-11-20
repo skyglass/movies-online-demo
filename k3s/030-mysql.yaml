@@ -1,37 +1,38 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: mongodb
+  name: mysql
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: mongodb
+      app: mysql
   template:
     metadata:
       labels:
-        app: mongodb
+        app: mysql
     spec:
       containers:
-      - name: mongodb
-        image: mongo:3.6.9
+      - name: mysql
+        image: mysql:5.7
+        args:
+          - "--ignore-db-dir=lost+found"
         envFrom:
         - secretRef:
-            name: mongodb-server-credentials
+            name: mysql-server-credentials
         ports:
-          - containerPort: 27017
+        - containerPort: 3306
         resources:
           limits:
             memory: 350Mi
-            
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: mongodb
+  name: mysql
 spec:
   selector:
-    app: mongodb
+    app: mysql
   ports:
-    - name: mongo
-      port: 27017
+    - name: mysql
+      port: 3306

@@ -52,3 +52,15 @@ resource "aws_lb_listener" "mtc_lb_listener" {
     target_group_arn = aws_lb_target_group.mtc_tg.arn
   }
 }
+
+resource "aws_route53_record" "mtc_lb_route53_record" {
+  zone_id = var.hosted_zone_id
+  name    = "${var.domain_name}"
+  type    = "A"
+
+  alias {
+    name                   = aws_lb.mtc_lb.dns_name
+    zone_id                = aws_lb.mtc_lb.zone_id
+    evaluate_target_health = true
+  }
+}
