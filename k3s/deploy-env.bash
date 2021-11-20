@@ -4,6 +4,7 @@ kubectl create configmap config-repo-product-composite --from-file=../k3s/config
 kubectl create configmap config-repo-product           --from-file=../k3s/config-repo/application.yml --from-file=../k3s/config-repo/product.yml --save-config
 kubectl create configmap config-repo-recommendation    --from-file=../k3s/config-repo/application.yml --from-file=../k3s/config-repo/recommendation.yml --save-config
 kubectl create configmap config-repo-review            --from-file=../k3s/config-repo/application.yml --from-file=../k3s/config-repo/review.yml --save-config
+kubectl create configmap config-repo-movies-api --from-file=../k3s/config-repo/application.yml --from-file=../k3s/config-repo/movies-api.yml --save-config
 
 kubectl create secret generic rabbitmq-server-credentials \
     --from-literal=RABBITMQ_DEFAULT_USER=rabbit-user-dev \

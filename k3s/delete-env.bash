@@ -3,7 +3,8 @@
 kubectl delete configmap config-repo-product-composite
 kubectl delete configmap config-repo-product
 kubectl delete configmap config-repo-recommendation
-kubectl delete configmap config-repo-review 
+kubectl delete configmap config-repo-review
+kubectl delete configmap config-repo-movies-api
 
 kubectl delete secret rabbitmq-server-credentials
 
