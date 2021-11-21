@@ -23,22 +23,9 @@ spring.data.mongodb:
   port: 27017
   database: moviesdb
 
-spring.cloud.stream:
-  defaultBinder: rabbit
-  default.contentType: application/json
-  bindings:
-    output-products:
-      destination: products
-      producer:
-        required-groups: auditGroup
-    output-recommendations:
-      destination: recommendations
-      producer:
-        required-groups: auditGroup
-    output-reviews:
-      destination: reviews
-      producer:
-        required-groups: auditGroup
+app:
+  cors:
+    allowed-origins: https://movie.skycomposer.net/movies-ui  
 
 management:
   endpoints:
@@ -46,46 +33,26 @@ management:
       exposure.include: beans, env, health, info, metrics, mappings
   endpoint:
     health:
-      show-details: always        
+      show-details: ALWAYS
+  server:
+    port: 4004
+  metrics:
+    tags:
+      application: ${spring.application.name}
 
+springdoc:
+  show-actuator: false
+  swagger-ui:
+    groups-order: DESC
+    disable-swagger-default-url: true
 
-spring:
-  security:
-    oauth2:
-      resourceserver:
-        jwt:
-          issuer-uri: https://movie.skycomposer.net/auth/realms/demo
-          jwk-set-uri: https://movie.skycomposer.net/auth/realms/demo/protocol/openid-connect/certs
-
-      client:
-        registration:
-          keycloak:
-            client-id: demoapp
-            client-secret: demoapp
-            clientName: Keycloak
-            authorization-grant-type: authorization_code
-            redirectUri: 'https://movie.skycomposer.net/movies-api/swagger-ui/index.html'
-            redirectUriTemplate: '{baseUrl}/login/oauth2/code/{registrationId}'
-            scope:
-              - openid
-              - profile
-              - email
-
-        provider:
-          keycloak:
-            authorization-uri: https://movie.skycomposer.net/auth/realms/demo/protocol/openid-connect/auth
-            token-uri: https://movie.skycomposer.net/auth/realms/demo/protocol/openid-connect/token
-            user-info-uri: https://movie.skycomposer.net/auth/realms/demo/protocol/openid-connect/userinfo
-            jwk-set-uri: https://movie.skycomposer.net/auth/realms/demo/protocol/openid-connect/certs
-            user-name-attribute: preferred_username
-
-opentracing:
-  jaeger:
-    log-spans: true
-    enable-b3-propagation: true
-    enabled: true
-    http-sender:
-      url: http://jaeger-collector.istio-system:14268/api/traces
+keycloak:
+  auth-server-url: https://movie.skycomposer.net/auth
+  realm: company-services
+  resource: movies-app
+  ssl-required: external
+  principal-attribute: preferred_username
+  use-resource-role-mappings: true
 
 app.product-service.timeoutSec: 2
 
@@ -95,21 +62,6 @@ spring.config.activate.on-profile: docker
 spring.data.mongodb.host: mongodb
 
 server.port: 80
-
----
-spring.config.activate.on-profile: streaming_partitioned
-
-spring.cloud.stream.bindings.output-products.producer:
-  partition-key-expression: payload.key
-  partition-count: 2
-
-spring.cloud.stream.bindings.output-recommendations.producer:
-  partition-key-expression: payload.key
-  partition-count: 2
-
-spring.cloud.stream.bindings.output-reviews.producer:
-  partition-key-expression: payload.key
-  partition-count: 2
 
 ---
 spring.config.activate.on-profile: prod

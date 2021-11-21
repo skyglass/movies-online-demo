@@ -9,22 +9,6 @@ spec:
 apiVersion: "networking.k8s.io/v1beta1"
 kind: "Ingress"
 metadata:
-  name: "traefik-product-composite-ingress"
-spec:
-  ingressClassName: "traefik-lb"
-  rules:
-  - host: "movie.skycomposer.net"
-    http:
-      paths:
-      - path: "/product-composite"
-        backend:
-          serviceName: "product-composite"
-          servicePort: 80
-
----
-apiVersion: "networking.k8s.io/v1beta1"
-kind: "Ingress"
-metadata:
   name: "traefik-movies-api-ingress"
 spec:
   ingressClassName: "traefik-lb"

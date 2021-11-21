@@ -261,13 +261,7 @@
 
     <modules>
 	   <module>build-tools</module>	    	
-	   <module>books-online-api</module>	
-       <module>books-online-util</module>
-       <module>movies-api</module>		   	   	   
-       <module>review-service</module>	
-       <module>recommendation-service</module>	   
-       <module>product-service</module>	
-	   <module>product-composite-service</module>	   
+       <module>movies-api</module>		   	   	      
     </modules>
 
     <profiles>
