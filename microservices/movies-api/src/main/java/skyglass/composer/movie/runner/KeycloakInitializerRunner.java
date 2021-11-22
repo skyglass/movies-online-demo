@@ -32,6 +32,9 @@ public class KeycloakInitializerRunner implements CommandLineRunner {
 	@Value("${keycloak.auth-server-url}")
 	private String keycloakServerUrl;
 
+	@Value("${keycloak-ext.redirect-url}")
+	private String redirectUrl;
+
 	private final Keycloak keycloakAdmin;
 
 	@Override
@@ -57,7 +60,7 @@ public class KeycloakInitializerRunner implements CommandLineRunner {
 		clientRepresentation.setDirectAccessGrantsEnabled(true);
 		clientRepresentation.setDefaultRoles(new String[] { MOVIES_APP_ROLES.get(0) });
 		clientRepresentation.setPublicClient(true);
-		clientRepresentation.setRedirectUris(Collections.singletonList(MOVIES_APP_REDIRECT_URL));
+		clientRepresentation.setRedirectUris(Collections.singletonList(redirectUrl));
 		realmRepresentation.setClients(Collections.singletonList(clientRepresentation));
 
 		// Users
@@ -107,8 +110,6 @@ public class KeycloakInitializerRunner implements CommandLineRunner {
 
 	private static final List<String> MOVIES_APP_ROLES = Arrays.asList(WebSecurityConfig.USER,
 			WebSecurityConfig.MOVIES_MANAGER);
-
-	private static final String MOVIES_APP_REDIRECT_URL = "https://movie.skycomposer.net/movies-api/*";
 
 	private static final List<UserPass> MOVIES_APP_USERS = Arrays.asList(new UserPass("admin", "admin"),
 			new UserPass("user", "user"));

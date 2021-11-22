@@ -54,6 +54,9 @@ keycloak:
   principal-attribute: preferred_username
   use-resource-role-mappings: true
 
+keycloak-ext:
+  redirect-url: https://movie.skycomposer.net/movies-api/*  
+
 app.product-service.timeoutSec: 2
 
 ---

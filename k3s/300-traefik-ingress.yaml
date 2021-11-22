@@ -19,7 +19,23 @@ spec:
       - path: "/movies-api"
         backend:
           serviceName: "movies-api"
-          servicePort: 80         
+          servicePort: 80
+
+---
+apiVersion: "networking.k8s.io/v1beta1"
+kind: "Ingress"
+metadata:
+  name: "traefik-movies-ui-ingress"
+spec:
+  ingressClassName: "traefik-lb"
+  rules:
+  - host: "movie.skycomposer.net"
+    http:
+      paths:
+      - path: "/movies-ui"
+        backend:
+          serviceName: "movies-ui"
+          servicePort: 80
 
 ---
 apiVersion: "networking.k8s.io/v1beta1"
