@@ -33,13 +33,14 @@ rules:
   - apiGroups:
       - traefik.containo.us
     resources:
+      - middlewares
+      - middlewaretcps
       - ingressroutes
+      - traefikservices
       - ingressroutetcps
       - ingressrouteudps
-      - middlewares
       - tlsoptions
       - tlsstores
-      - traefikservices
       - serverstransports
     verbs:
       - get

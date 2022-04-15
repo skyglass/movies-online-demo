@@ -1,54 +1,43 @@
-apiVersion: networking.k8s.io/v1beta1
-kind: IngressClass
-metadata:
-  name: traefik-lb
-spec:
-  controller: traefik.io/ingress-controller
-
----
-apiVersion: "networking.k8s.io/v1beta1"
-kind: "Ingress"
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
 metadata:
   name: "traefik-movies-api-ingress"
 spec:
-  ingressClassName: "traefik-lb"
-  rules:
-  - host: "movie.skycomposer.net"
-    http:
-      paths:
-      - path: "/movies-api"
-        backend:
-          serviceName: "movies-api"
-          servicePort: 80
+  entryPoints:
+    - web
+  routes:
+  - match: Host(`movie.skycomposer.net`) && PathPrefix(`/movies-api`)
+    kind: Rule
+    services:
+    - name: movies-api
+      port: 80
 
 ---
-apiVersion: "networking.k8s.io/v1beta1"
-kind: "Ingress"
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
 metadata:
   name: "traefik-movies-ui-ingress"
 spec:
-  ingressClassName: "traefik-lb"
-  rules:
-  - host: "movie.skycomposer.net"
-    http:
-      paths:
-      - path: "/movies-ui"
-        backend:
-          serviceName: "movies-ui"
-          servicePort: 80
+  entryPoints:
+    - web
+  routes:
+  - match: Host(`movie.skycomposer.net`) && PathPrefix(`/movies-ui`)
+    kind: Rule
+    services:
+    - name: movies-ui
+      port: 80       
 
 ---
-apiVersion: "networking.k8s.io/v1beta1"
-kind: "Ingress"
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
 metadata:
   name: "traefik-keycloak-ingress"
 spec:
-  ingressClassName: "traefik-lb"
-  rules:
-  - host: "movie.skycomposer.net"
-    http:
-      paths:
-      - path: "/"
-        backend:
-          serviceName: "keycloak"
-          servicePort: 80
+  entryPoints:
+    - web
+  routes:
+  - match: Host(`movie.skycomposer.net`) && PathPrefix(`/`)
+    kind: Rule
+    services:
+    - name: keycloak
+      port: 80
