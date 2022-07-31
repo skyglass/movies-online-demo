@@ -4,7 +4,7 @@ metadata:
   name: "traefik-movies-api-ingress"
 spec:
   entryPoints:
-    - web
+    - websecure
   routes:
   - match: Host(`movie.skycomposer.net`) && PathPrefix(`/movies-api`)
     kind: Rule
@@ -19,7 +19,7 @@ metadata:
   name: "traefik-movies-ui-ingress"
 spec:
   entryPoints:
-    - web
+    - websecure
   routes:
   - match: Host(`movie.skycomposer.net`) && PathPrefix(`/movies-ui`)
     kind: Rule
@@ -34,7 +34,7 @@ metadata:
   name: "traefik-keycloak-ingress"
 spec:
   entryPoints:
-    - web
+    - websecure
   routes:
   - match: Host(`movie.skycomposer.net`) && PathPrefix(`/`)
     kind: Rule
