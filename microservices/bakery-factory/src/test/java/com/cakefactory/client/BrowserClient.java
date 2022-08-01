@@ -1,163 +1,170 @@
 package com.cakefactory.client;
 
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.*;
-import lombok.SneakyThrows;
-import lombok.extern.slf4j.Slf4j;
+import java.util.List;
+
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.htmlunit.MockMvcWebClientBuilder;
 
-import java.util.List;
+import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.DomNode;
+import com.gargoylesoftware.htmlunit.html.HtmlButton;
+import com.gargoylesoftware.htmlunit.html.HtmlElement;
+import com.gargoylesoftware.htmlunit.html.HtmlInput;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
+
+import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class BrowserClient {
 
-    private final WebClient webClient;
-    private HtmlPage currentPage;
+	private final WebClient webClient;
 
-    public BrowserClient(MockMvc mockMvc) {
-        this.webClient = MockMvcWebClientBuilder.mockMvcSetup(mockMvc).build();
-    }
+	private HtmlPage currentPage;
 
-    @SneakyThrows
-	public void goToHomepage() {
-        this.currentPage = this.webClient.getPage("http://localhost");
-	}
-
-    @SneakyThrows
-	public void clickAddToBasket(String title) {
-        List<DomNode> itemCards = this.currentPage.getByXPath(String.format("//div[descendant::a[text()='%s'] and @class='card h-100']", title));
-        if (itemCards.size() != 1) {
-            log.warn("No item card found for {}", title);
-            return;
-        }
-
-        HtmlElement addButton = itemCards.get(0).querySelector(".add-to-basket");
-        if (addButton == null) {
-            log.warn("No add button found for {}", title);
-            return;
-        }
-
-        this.currentPage = addButton.click();
-	}
-
-	public Integer getBasketItems() {
-        try {
-            String basketTotalValue = this.currentPage.querySelector(".basket-total").asText();
-            return Integer.parseInt(basketTotalValue);
-        } catch (NumberFormatException | NullPointerException e) {
-            return 0;
-        }
-    }
-
-    @SneakyThrows
-    public void goToBasket() {
-        this.currentPage = this.webClient.getPage("http://localhost/basket");
-    }
-
-	public String getBasketItemQtyLabel(String title) {
-        DomNode itemRow = getBasketItemRow(title);
-        if (itemRow == null) {
-            return "";
-        }
-
-		return itemRow.querySelector(".qty").asText();
+	public BrowserClient(MockMvc mockMvc) {
+		this.webClient = MockMvcWebClientBuilder.mockMvcSetup(mockMvc).build();
 	}
 
 	@SneakyThrows
-    public void clickRemoveFromBasket(String title) {
-        DomNode itemRow = getBasketItemRow(title);
-        if (itemRow == null) {
-            return;
-        }
+	public void goToHomepage() {
+		this.currentPage = this.webClient.getPage("http://localhost");
+	}
 
-        HtmlElement deleteButton = itemRow.querySelector(".btn.remove-item");
-        this.currentPage = deleteButton.click();
-    }
+	@SneakyThrows
+	public void clickAddToBasket(String title) {
+		List<DomNode> itemCards = this.currentPage.getByXPath(String.format("//div[descendant::a[text()='%s'] and @class='card h-100']", title));
+		if (itemCards.size() != 1) {
+			log.warn("No item card found for {}", title);
+			return;
+		}
 
-    public void fillInAddress(String line1, String line2, String postcode) {
-        setValue("#addressLine1", line1);
-        setValue("#addressLine2", line2);
-        setValue("#postcode", postcode);
-    }
+		HtmlElement addButton = itemCards.get(0).querySelector(".add-to-basket");
+		if (addButton == null) {
+			log.warn("No add button found for {}", title);
+			return;
+		}
 
-    @SneakyThrows
-    public void completeOrder() {
-        HtmlElement completeOrderButton = this.currentPage.querySelector("#complete-order");
-        this.currentPage = completeOrderButton.click();
-    }
+		this.currentPage = addButton.click();
+	}
 
-    public String pageText() {
-        return this.currentPage.asText();
-    }
+	public Integer getBasketItems() {
+		try {
+			String basketTotalValue = this.currentPage.querySelector(".basket-total").asXml();
+			return Integer.parseInt(basketTotalValue);
+		} catch (NumberFormatException | NullPointerException e) {
+			return 0;
+		}
+	}
 
-    private DomNode getBasketItemRow(String title) {
-        List<DomNode> items = this.currentPage.getByXPath(String.format("//tr[descendant::td[text()='%s']]", title));
-        if (items.size() != 1) {
-            log.warn("No item found with title {}", title);
-            return null;
-        }
+	@SneakyThrows
+	public void goToBasket() {
+		this.currentPage = this.webClient.getPage("http://localhost/basket");
+	}
 
-        return items.get(0);
-    }
+	public String getBasketItemQtyLabel(String title) {
+		DomNode itemRow = getBasketItemRow(title);
+		if (itemRow == null) {
+			return "";
+		}
 
-    @SneakyThrows
-    public void goToSignupPage() {
-        this.currentPage = this.webClient.getPage("http://localhost/signup");
-    }
+		return itemRow.querySelector(".qty").asXml();
+	}
 
-    @SneakyThrows
-    public void goToAccountPage() {
-        this.currentPage = this.webClient.getPage("http://localhost/account");
-    }
+	@SneakyThrows
+	public void clickRemoveFromBasket(String title) {
+		DomNode itemRow = getBasketItemRow(title);
+		if (itemRow == null) {
+			return;
+		}
 
-    public void fillInDetails(String email, String password, String addressLine1, String addressLine2, String postcode) {
-        setValue("#email", email);
-        setValue("#password", password);
-        fillInAddress(addressLine1, addressLine2, postcode);
-    }
+		HtmlElement deleteButton = itemRow.querySelector(".btn.remove-item");
+		this.currentPage = deleteButton.click();
+	}
 
-    @SneakyThrows
-    public void completeSignup() {
-        HtmlButton signupButton = this.currentPage.querySelector("#signup");
-        this.currentPage = signupButton.click();
-    }
+	public void fillInAddress(String line1, String line2, String postcode) {
+		setValue("#addressLine1", line1);
+		setValue("#addressLine2", line2);
+		setValue("#postcode", postcode);
+	}
 
-    public String getCurrentUserEmail() {
-        return this.currentPage.querySelector("#current-user").asText();
-    }
+	@SneakyThrows
+	public void completeOrder() {
+		HtmlElement completeOrderButton = this.currentPage.querySelector("#complete-order");
+		this.currentPage = completeOrderButton.click();
+	}
 
-    @SneakyThrows
-    public void goToLoginPage() {
-        this.currentPage = this.webClient.getPage("http://localhost/login");
-    }
+	public String pageText() {
+		return this.currentPage.asXml();
+	}
 
-    public void fillInLogin(String email, String password) {
-        setValue("#username", email);
-        setValue("#password", password);
-    }
+	private DomNode getBasketItemRow(String title) {
+		List<DomNode> items = this.currentPage.getByXPath(String.format("//tr[descendant::td[text()='%s']]", title));
+		if (items.size() != 1) {
+			log.warn("No item found with title {}", title);
+			return null;
+		}
 
-    @SneakyThrows
-    public void clickPrimaryButton() {
-        HtmlButton loginButton = this.currentPage.querySelector(".btn-primary");
-        this.currentPage = loginButton.click();
-    }
+		return items.get(0);
+	}
 
-    public String getAddressLine1() {
-        return this.currentPage.querySelector("#addressLine1").asText();
-    }
+	@SneakyThrows
+	public void goToSignupPage() {
+		this.currentPage = this.webClient.getPage("http://localhost/signup");
+	}
 
-    public String getAddressLine2() {
-        return this.currentPage.querySelector("#addressLine2").asText();
-    }
+	@SneakyThrows
+	public void goToAccountPage() {
+		this.currentPage = this.webClient.getPage("http://localhost/account");
+	}
 
-    public String getPostcode() {
-        return this.currentPage.querySelector("#postcode").asText();
-    }
+	public void fillInDetails(String email, String password, String addressLine1, String addressLine2, String postcode) {
+		setValue("#email", email);
+		setValue("#password", password);
+		fillInAddress(addressLine1, addressLine2, postcode);
+	}
 
-    private void setValue(String selector, String value) {
-        HtmlInput input = this.currentPage.querySelector(selector);
-        input.setValueAttribute(value);
+	@SneakyThrows
+	public void completeSignup() {
+		HtmlButton signupButton = this.currentPage.querySelector("#signup");
+		this.currentPage = signupButton.click();
+	}
 
-    }
+	public String getCurrentUserEmail() {
+		return this.currentPage.querySelector("#current-user").asXml();
+	}
+
+	@SneakyThrows
+	public void goToLoginPage() {
+		this.currentPage = this.webClient.getPage("http://localhost/login");
+	}
+
+	public void fillInLogin(String email, String password) {
+		setValue("#username", email);
+		setValue("#password", password);
+	}
+
+	@SneakyThrows
+	public void clickPrimaryButton() {
+		HtmlButton loginButton = this.currentPage.querySelector(".btn-primary");
+		this.currentPage = loginButton.click();
+	}
+
+	public String getAddressLine1() {
+		return this.currentPage.querySelector("#addressLine1").asXml();
+	}
+
+	public String getAddressLine2() {
+		return this.currentPage.querySelector("#addressLine2").asXml();
+	}
+
+	public String getPostcode() {
+		return this.currentPage.querySelector("#postcode").asXml();
+	}
+
+	private void setValue(String selector, String value) {
+		HtmlInput input = this.currentPage.querySelector(selector);
+		input.setValueAttribute(value);
+
+	}
 }

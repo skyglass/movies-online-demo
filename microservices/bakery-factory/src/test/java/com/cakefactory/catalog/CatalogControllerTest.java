@@ -1,12 +1,12 @@
 package com.cakefactory.catalog;
 
-import com.cakefactory.account.AccountService;
-import com.cakefactory.basket.Basket;
-import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.DomNode;
-import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
+
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.util.Collections;
+
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -20,12 +20,13 @@ import org.springframework.test.web.servlet.htmlunit.MockMvcWebClientBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import java.io.IOException;
-import java.math.BigDecimal;
-import java.util.Collections;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.when;
+import com.cakefactory.account.AccountService;
+import com.cakefactory.basket.Basket;
+import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
+import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.DomNode;
+import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
 
 @WebMvcTest(controllers = CatalogController.class)
 class CatalogControllerTest {
@@ -65,7 +66,7 @@ class CatalogControllerTest {
 		HtmlPage page = webClient.getPage("http://localhost/");
 
 		assertThat(page.querySelectorAll(".item-title"))
-				.anyMatch(domElement -> expectedTitle.equals(domElement.asText()));
+				.anyMatch(domElement -> expectedTitle.equals(domElement.asXml()));
 	}
 
 	@Test
@@ -77,7 +78,7 @@ class CatalogControllerTest {
 
 		DomNode totalElement = page.querySelector(".basket-total");
 		assertThat(totalElement).isNotNull();
-		assertThat(totalElement.asText()).isEqualTo("3");
+		assertThat(totalElement.asXml()).isEqualTo("3");
 	}
 
 	@Test
@@ -89,7 +90,7 @@ class CatalogControllerTest {
 		HtmlPage page = webClient.getPage("http://localhost/");
 
 		DomNode totalElement = page.querySelector("#current-user");
-		assertThat(totalElement.asText()).isEqualTo("test@example.com");
+		assertThat(totalElement.asXml()).isEqualTo("test@example.com");
 	}
 
 	@Test
@@ -100,10 +101,9 @@ class CatalogControllerTest {
 		HtmlPage page = webClient.getPage("http://localhost/");
 
 		HtmlAnchor totalElement = page.querySelector("#current-user");
-		assertThat(totalElement.asText()).isEqualTo("Login");
+		assertThat(totalElement.asXml()).isEqualTo("Login");
 		assertThat(totalElement.getHrefAttribute()).isEqualTo("/login");
 	}
-
 
 	private void mockItems(String title, BigDecimal price) {
 		when(catalogService.getItems()).thenReturn(Collections.singletonList(new Item("test", title, price)));

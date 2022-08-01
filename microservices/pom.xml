@@ -261,7 +261,8 @@
 
     <modules>
 	   <module>build-tools</module>	    	
-       <module>movies-api</module>		   	   	      
+       <module>movies-api</module>	
+       <module>bakery-factory</module>
     </modules>
 
     <profiles>
