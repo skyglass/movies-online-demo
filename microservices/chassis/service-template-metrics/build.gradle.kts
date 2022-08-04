@@ -10,6 +10,8 @@ dependencies {
     implementation(project(":service-template-util"))
 
 
+    implementation("io.micrometer:micrometer-registry-prometheus:1.6.4")
+    implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-web")
 
     testImplementation(project(":service-template-test-util"))

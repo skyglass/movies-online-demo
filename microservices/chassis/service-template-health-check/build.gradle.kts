@@ -19,7 +19,7 @@ dependencies {
     testImplementation("org.testcontainers:testcontainers:$testContainersVersion")
     testImplementation("org.testcontainers:junit-jupiter:$testContainersVersion")
 
-    runtimeOnly("mysql:mysql-connector-java:8.0.27")
+    runtimeOnly("mysql:mysql-connector-java:8.0.21")
 
 }
 

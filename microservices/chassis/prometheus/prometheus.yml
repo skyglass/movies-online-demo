@@ -8,3 +8,8 @@ rule_files:
 
 # https://prometheus.io/docs/prometheus/latest/configuration/configuration/#dns_sd_config
 
+scrape_configs:
+  - job_name: prometheus
+    metrics_path: /actuator/prometheus
+    static_configs:
+      - targets: ['host.docker.internal:8080']

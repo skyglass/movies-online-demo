@@ -2,5 +2,5 @@
 
 docker run ${1:--it} \
    --name mysqlterm --network=${PWD##*/}_default --rm \
-   mysql:5.7.13 \
+   mysql:8.0.27 \
    sh -c 'exec mysql -hmysql  -uroot -prootpassword -o service_template'
