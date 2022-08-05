@@ -6,7 +6,7 @@ object MySqlContainer : DefaultPropertyProvidingContainer() {
 
     fun getContainerAlias() = "mysql"
 
-    override val container: MySQLContainer<Nothing> = MySQLContainer<Nothing>("mysql:5.7.13").apply {
+    override val container: MySQLContainer<Nothing> = MySQLContainer<Nothing>("mysql:5.7.28").apply {
         withDatabaseName("dbname")
         withReuse(true)
         ContainerNetwork.withNetwork(this)
