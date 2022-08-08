@@ -56,6 +56,7 @@ configure<com.avast.gradle.dockercompose.ComposeExtension> {
         projectName = null
         startedServices.set(listOf("mysql", "keycloak"))
     }
+
 }
 
 gradle.projectsEvaluated {
