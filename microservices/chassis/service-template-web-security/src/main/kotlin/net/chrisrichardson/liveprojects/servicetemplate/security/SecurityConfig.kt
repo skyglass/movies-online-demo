@@ -41,3 +41,11 @@ class SecurityConfig : WebSecurityConfigurerAdapter() {
 
 }
 
+@Component
+class DefaultAuthenticatedUserSupplier : AuthenticatedUserSupplier {
+
+    override fun get(): AuthenticatedUser {
+        val authentication = SecurityContextHolder.getContext().authentication
+        return AuthenticatedUser(authentication.name, authentication.authorities.map(GrantedAuthority::getAuthority).toSet())
+    }
+}
