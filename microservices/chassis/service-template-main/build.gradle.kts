@@ -22,6 +22,7 @@ dependencies {
     implementation(project(":service-template-config"))
     implementation(project(":service-template-persistence"))
     implementation(project(":service-template-web"))
+    implementation(project(":service-template-web-security"))
     implementation(project(":service-template-distributed-tracing"))
 
     implementation(project(":service-template-health-check"))
@@ -34,12 +35,16 @@ dependencies {
     testImplementation(project(":service-template-test-util"))
     testImplementation(project(":service-template-test-data"))
     testImplementation(project(":service-template-test-containers"))
+    testImplementation(project(":service-template-test-keycloak"))
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 
     testImplementation("org.testcontainers:testcontainers:$testContainersVersion")
     testImplementation("org.testcontainers:junit-jupiter:$testContainersVersion")
 
+    testImplementation("org.testcontainers:selenium:$testContainersVersion")
+    testImplementation("org.seleniumhq.selenium:selenium-remote-driver:3.141.59")
+    testImplementation("org.seleniumhq.selenium:selenium-chrome-driver:3.141.59")
 
 }
 
@@ -61,6 +66,7 @@ val checkTask = tasks.findByName("check")!!
 
 checkTask.shouldRunAfter(":service-template-domain:check")
 checkTask.shouldRunAfter(":service-template-web:check")
+checkTask.shouldRunAfter(":service-template-web-security:check")
 checkTask.shouldRunAfter(":service-template-persistence:check")
 checkTask.shouldRunAfter(":service-template-metrics:check")
 checkTask.shouldRunAfter(":service-template-health-check:check")

@@ -56,7 +56,6 @@ configure<com.avast.gradle.dockercompose.ComposeExtension> {
         projectName = null
         startedServices.set(listOf("mysql", "keycloak"))
     }
-
 }
 
 gradle.projectsEvaluated {
@@ -157,6 +156,7 @@ val liveProject : String by project
 val todoModules =
         mapOf(
                 "series-01-live-project-01-configuring-observability" to listOf("service-template-health-check", "service-template-distributed-tracing", "service-template-metrics")
+                ,"series-01-live-project-02-implementing-security" to listOf("service-template-web-security", "service-template-main")
         )
 
 dependencies {
@@ -192,3 +192,4 @@ gradle.projectsEvaluated {
 }
 
 tasks.findByPath(":service-template-main:bootRun")!!.dependsOn(":sqlComposeUp")
+tasks.findByPath(":service-template-main:bootRun")!!.dependsOn(":sqlAndKeycloakComposeUp")

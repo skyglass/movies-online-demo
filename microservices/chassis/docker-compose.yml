@@ -18,10 +18,27 @@ services:
     ports:
       - 9090:9090
 
+  keycloak:
+    build: ./keycloak
+    ports:
+      - 8091:8080
+    environment:
+      - KEYCLOAK_USER=admin
+      - KEYCLOAK_PASSWORD=admin
+      - KEYCLOAK_IMPORT=/realm.json
+      - DB_VENDOR=h2
+
   zipkin:
     image: openzipkin/zipkin:2.21
     ports:
       - "9411:9411"
     environment:
       JAVA_OPTS: -Xmx64m
+
+  keycloak-test-proxy:
+    build: ./keycloak-test-proxy
+    ports:
+      - 8093:80
+    depends_on:
+      - keycloak
 
