@@ -27,8 +27,14 @@ jobs:
         ./gradlew compileAll
         export DOCKER_HOST_IP=$(hostname -I | sed -e 's/ .*//g')
         echo DOCKER_HOST_IP=$DOCKER_HOST_IP
-        ./gradlew validateEnvironment
+        ./gradlew build
         .github/workflows/verify-todos.py
+
+    - name: Publish image
+      run: |
+        echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u cer --password-stdin
+        docker tag live-projects-service-template ghcr.io/$GITHUB_REPOSITORY
+        docker push ghcr.io/$GITHUB_REPOSITORY
 
     - name: Save test results
       if: ${{ always() }}

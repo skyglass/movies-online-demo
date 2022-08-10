@@ -42,3 +42,19 @@ services:
     depends_on:
       - keycloak
 
+  service-template:
+      build: ./service-template-main
+      image: ghcr.io/skyglass/service-template
+      ports:
+        - 8080:8080
+      depends_on:
+        - keycloak
+        - mysql
+        - zipkin
+      environment:
+        - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI=http://keycloak:8080/auth/realms/service-template/protocol/openid-connect/certs
+        - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI=http://keycloak:8080/auth/realms/service-template
+        - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/service_template
+        - SPRING_ZIPKIN_BASE_URL=http://zipkin:9411/
+
+# Disables connecting to mysql - https://hub.docker.com/r/jboss/keycloak/

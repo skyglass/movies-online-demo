@@ -10,9 +10,15 @@ plugins {
 
 apply<IntegrationTestsPlugin>()
 
+apply<ComponentTestsPlugin>()
 
 apply<RestAssuredTestDependenciesPlugin>()
 
+tasks.getByName<org.springframework.boot.gradle.tasks.bundling.BootJar>("bootJar") {
+    layered {
+        isEnabled = true
+    }
+}
 
 
 dependencies {
