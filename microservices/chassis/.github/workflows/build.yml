@@ -29,11 +29,12 @@ jobs:
         echo DOCKER_HOST_IP=$DOCKER_HOST_IP
         ./gradlew build
         .github/workflows/verify-todos.py
+        docker build ./service-template-main -t service-template -f ./service-template-main/Dockerfile
 
     - name: Publish image
       run: |
         echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u cer --password-stdin
-        docker tag live-projects-service-template ghcr.io/$GITHUB_REPOSITORY
+        docker tag service-template ghcr.io/$GITHUB_REPOSITORY
         docker push ghcr.io/$GITHUB_REPOSITORY
 
     - name: Save test results
